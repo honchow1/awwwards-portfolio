@@ -65,6 +65,54 @@ export const BackgroundBeamsWithCollision = ({
       delay: 2,
       className: "h-6",
     },
+    {
+      initialX: 1400,
+      translateX: 1400,
+      duration: 12,
+      repeatDelay: 4,
+      delay: 2,
+      className: "h-12",
+    },
+    {
+      initialX: 1600,
+      translateX: 1600,
+      duration: 8,
+      repeatDelay: 4,
+      delay: 2,
+      className: "h-12",
+    },
+    {
+      initialX: 1800,
+      translateX: 1800,
+      duration: 10,
+      repeatDelay: 4,
+      delay: 2,
+      className: "h-12",
+    },
+    {
+      initialX: 2000,
+      translateX: 2000,
+      duration: 12,
+      repeatDelay: 4,
+      delay: 2,
+      className: "h-12",
+    },
+    {
+      initialX: 2200,
+      translateX: 2200,
+      duration: 14,
+      repeatDelay: 4,
+      delay: 2,
+      className: "h-12",
+    },
+    {
+      initialX: 2400,
+      translateX: 2400,
+      duration: 16,
+      repeatDelay: 4,
+      delay: 2,
+      className: "h-12",
+    },
   ];
 
   return (
@@ -187,7 +235,7 @@ const CollisionMechanism = React.forwardRef<
         }}
         variants={{
           animate: {
-            translateY: beamOptions.translateY || "1800px",
+            translateY: beamOptions.translateY || "2400px",
             translateX: beamOptions.translateX || "0px",
             rotate: beamOptions.rotate || 0,
           },
@@ -201,7 +249,7 @@ const CollisionMechanism = React.forwardRef<
           repeatDelay: beamOptions.repeatDelay || 0,
         }}
         className={cn(
-          "absolute left-0 top-20 m-auto h-14 w-px rounded-full bg-gradient-to-t from-indigo-500 via-purple-500 to-transparent",
+          "absolute left-0 top-20 m-auto h-14 w-px rounded-full bg-linear-to-t from-amber-300 via-blue-50  to-transparent",
           beamOptions.className
         )}
       />
@@ -234,12 +282,12 @@ const Explosion = ({ ...props }: React.HTMLProps<HTMLDivElement>) => {
   }));
 
   return (
-    <div {...props} className={cn("absolute z-50 h-2 w-2", props.className)}>
+    <div {...props} className={cn("absolute z-50 h-4 w-2", props.className)}>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        transition={{ duration: 1.5, ease: "easeOut" }}
+        transition={{ duration: 1.5, ease: "linear" }}
         className="absolute -inset-x-10 top-0 m-auto h-2 w-10 rounded-full bg-gradient-to-r from-transparent via-indigo-500 to-transparent blur-sm"
       ></motion.div>
       {spans.map((span) => (

@@ -215,12 +215,12 @@ export const GlobeViz = () => {
   const [satellites, setSatellites] = useState([]);
   const [scrollY, setScrollY] = useState(0);
   const animationStateRef = useRef({
-    startY: 50,
+    startY: 200,
     targetY: 0,
     currentTime: 0,
-    duration: 3,
+    duration: 5,
     isDropping: true,
-    floatPhase: 0,
+    floatPhase: 1,
   });
 
   // Track scroll position
@@ -321,7 +321,7 @@ export const GlobeVizScene = () => {
     <div style={{ height: window.innerHeight }}>
       <Canvas
         flat
-        camera={useMemo(() => ({ position: [0, 0, 250] }), [])}
+        camera={useMemo(() => ({ position: [0, 0, 300] }), [])}
         raycaster={useMemo(
           () => ({ params: { Points: { threshold: 0.2 } } }),
           []
