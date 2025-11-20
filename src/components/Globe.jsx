@@ -98,19 +98,40 @@ const SatellitePoints = ({ satellites, scrollY }) => {
   const pointsRef = useRef();
   const geometry = useMemo(() => new THREE.BufferGeometry(), []);
   const timeRef = useRef(new Date());
+  const whirlPhaseRef = useRef(0);
 
   useFrame(({ camera }, delta) => {
     if (!pointsRef.current || satellites.length === 0) return;
 
-    // Advance time for satellite motion (speed up by 60x for visible movement)
-    timeRef.current = new Date(+timeRef.current + delta * 60000);
+    // Animation phases based on scroll
+    const WHIRL_START = 100; // Start whirling at 100px scroll
+    const WHIRL_END = 200; // End whirling, start explosion at 400px scroll
+    const EXPLOSION_START = 200; // Start explosion at 400px scroll
+
+    // Calculate phase progress (0 to 1)
+    const whirlProgress = Math.max(
+      0,
+      Math.min(1, (scrollY - WHIRL_START) / (WHIRL_END - WHIRL_START))
+    );
+    const explosionProgress = Math.max(0, (scrollY - EXPLOSION_START) / 300); // Explosion over next 300px
+
+    // Speed multiplier for whirling (1x normal to 10x fast)
+    const whirlSpeedMultiplier = 1 + whirlProgress * 9;
+
+    // Advance time for satellite motion with whirling speed boost
+    const baseTimeStep = 60000; // 60x normal speed
+    const acceleratedTimeStep = baseTimeStep * whirlSpeedMultiplier;
+    timeRef.current = new Date(+timeRef.current + delta * acceleratedTimeStep);
     const time = timeRef.current;
+
+    // Accumulate whirl phase for rotation effect
+    whirlPhaseRef.current += delta * whirlProgress * 2;
 
     const positions = [];
     const cameraPos = camera.position.clone();
 
-    // Calculate explosion factor based on scroll (0 to 2x expansion)
-    const explosionFactor = 1 + scrollY * 0.003;
+    // Calculate explosion factor (only applies after explosion starts)
+    const explosionFactor = 1 + explosionProgress * 2; // Up to 3x expansion
 
     satellites.forEach(({ satrec }) => {
       try {
@@ -149,9 +170,22 @@ const SatellitePoints = ({ satellites, scrollY }) => {
             const phi = (90 - lat) * (Math.PI / 180);
             const theta = (lng + 180) * (Math.PI / 180);
 
-            const x = radius * Math.sin(phi) * Math.cos(theta);
-            const y = radius * Math.cos(phi);
-            const z = radius * Math.sin(phi) * Math.sin(theta);
+            let x = radius * Math.sin(phi) * Math.cos(theta);
+            let y = radius * Math.cos(phi);
+            let z = radius * Math.sin(phi) * Math.sin(theta);
+
+            // Apply whirling rotation effect - rotate around Y axis (vertical)
+            if (whirlProgress > 0) {
+              const satVector = new THREE.Vector3(x, y, z);
+              const rotationAxis = new THREE.Vector3(0, 1, 0); // Y-axis
+              const rotationAngle = whirlPhaseRef.current * whirlProgress;
+
+              // Rotate satellite position around globe center
+              satVector.applyAxisAngle(rotationAxis, rotationAngle);
+              x = satVector.x;
+              y = satVector.y;
+              z = satVector.z;
+            }
 
             // Final validation of 3D coordinates
             if (

@@ -3,18 +3,24 @@ import AnimatedHeaderSection from "../components/AnimatedHeaderSection";
 import { AnimatedTextLines } from "../components/AnimatedTextLines";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { Avatar } from "@/components/Avatar";
+import { Canvas } from "@react-three/fiber";
 
+import {
+  ContactShadows,
+  Environment,
+  OrbitControls,
+  Sky,
+} from "@react-three/drei";
 const About = () => {
-  const text = `Passionate about clean architecture
-    I build scalable, high-performance solutions
-    from prototype to production`;
+  const text = `Passionate about building fast, intuitive apps—from pixel-perfect React UIs to bulletproof serverless backends. Every line of code is a promise: quality that users feel.`;
   const aboutText = `Obsessed with building fast, intuitive apps—from pixel-perfect React UIs to bulletproof serverless backends. Every line of code is a promise: quality that users feel.
-  When I’m not shipping:
+  When I'm not shipping:
 ⚡️ Open-sourcing my latest experiment (or hacking on yours)
 🎥 Teaching devs on Twitch/YouTube—because rising tides lift all ships
 🧗 Rock climbing (problem-solving with real stakes)
 🎸 Strumming chords while CI pipelines pass (multitasking at its finest)`;
-  const imgRef = useRef(null);
+
   useGSAP(() => {
     gsap.to("#about", {
       scale: 0.95,
@@ -27,16 +33,6 @@ const About = () => {
       },
       ease: "power1.inOut",
     });
-
-    gsap.set(imgRef.current, {
-      clipPath: "polygon(0 100%, 100% 100%, 100% 100%, 0% 100%)",
-    });
-    gsap.to(imgRef.current, {
-      clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-      duration: 2,
-      ease: "power4.out",
-      scrollTrigger: { trigger: imgRef.current },
-    });
   });
   return (
     <section id="about" className="min-h-screen rounded-b-4xl">
@@ -47,13 +43,15 @@ const About = () => {
         textColor={"text-white"}
         withScrollTrigger={true}
       />
-      <div className="flex flex-col items-center justify-between gap-16 px-10 pb-16 text-xl font-light tracking-wide lg:flex-row md:text-2xl lg:text-3xl text-white/60">
-        <img
-          ref={imgRef}
-          src="images/man.jpg"
-          alt="man"
-          className="w-md rounded-3xl"
-        />
+      <div className="flex flex-col items-center justify-between gap-16 px-10 pb-16 text-xl font-light tracking-wide lg:flex-row md:text-2xl lg:text-3xl text-white/60 min-h-10/12">
+        <div className="relative flex min-w-md h-[600px] bg-transparent  items-center justify-center">
+          <Canvas shadows camera={{ position: [0, 10, 10], fov: 10 }}>
+            <Environment preset="sunset" />
+
+            <OrbitControls enableZoom={false} enablePan={false} />
+            <Avatar />
+          </Canvas>
+        </div>
         <AnimatedTextLines text={aboutText} className={"w-full"} />
       </div>
     </section>

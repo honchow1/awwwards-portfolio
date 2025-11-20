@@ -13,6 +13,7 @@ import {
 import {IconType} from "react-icons";
 
 export type ProjectProps = {
+  ref: React.RefObject<HTMLDivElement>;
   id: number;
   name: string;
   description: string;

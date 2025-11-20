@@ -15,9 +15,9 @@ const Hero = () => {
   const isMobile = useMediaQuery({ maxWidth: 853 });
   const [scrollY, setScrollY] = useState(0);
 
-  const text = `I help growing brands and startups gain an
-unfair advantage through premium
-results driven webs/apps`;
+  const text = `
+       Building fast, intuitive apps—from pixel-perfect React UIs to bulletproof serverless backends. Every line of code is a promise: quality that users feel.
+       `;
 
   // Track scroll for color change
   useEffect(() => {
@@ -33,7 +33,7 @@ results driven webs/apps`;
       <section id="home" className="flex flex-col justify-end min-h-screen">
         <div className="relative z-10 pointer-events-none">
           <AnimatedHeaderSection
-            subTitle={"404 No Bugs Found"}
+            subTitle={"A Dedicated Developer"}
             title={"Hon Chow"}
             text={text}
             withScrollTrigger={false}

@@ -6,24 +6,34 @@ import { useGSAP } from "@gsap/react";
 import { useRef } from "react";
 
 const ProjectGrid = () => {
-  const projectGridRef = useRef(null);
-  gsap.set(projectGridRef.current, {
-    clipPath: "polygon(0 100%, 100% 100%, 100% 100%, 0% 100%)",
+  const projectCardRefs = useRef<React.RefObject<HTMLDivElement>[]>([]);
+  projectCardRefs.current.forEach((ref) => {
+    if (!ref) return;
+    gsap.set(ref.current, {
+      clipPath: "polygon(0 100%, 100% 100%, 100% 100%, 0% 100%)",
+    });
   });
-  gsap.to(projectGridRef.current, {
-    clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-    duration: 0.5,
-    ease: "power4.out",
-    scrollTrigger: { trigger: projectGridRef.current },
+  projectCardRefs.current.forEach((ref) => {
+    if (!ref) return;
+    gsap.to(ref.current, {
+      clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+      duration: 0.5,
+      ease: "power4.out",
+      scrollTrigger: {
+        trigger: ref.current,
+      },
+    });
   });
   return (
     <>
-      <div
-        ref={projectGridRef}
-        className="grid w-full grid-cols-2 grid-rows-2 gap-y-10 gap-x-6  lg:grid-cols-2"
-      >
+      <div className="grid w-full grid-cols-2 grid-rows-2 gap-y-10 gap-x-6  lg:grid-cols-2">
         {projects.map((project: ProjectProps) => (
           <ProjectCard
+            ref={
+              projectCardRefs.current[
+                project.id
+              ] as React.RefObject<HTMLDivElement>
+            }
             id={project.id}
             key={project.id}
             name={project.name}

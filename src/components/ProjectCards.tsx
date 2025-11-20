@@ -10,6 +10,7 @@ import { SiGithub } from "react-icons/si";
 import { BsLink45Deg } from "react-icons/bs";
 import gsap from "gsap";
 const ProjectCard = ({
+  ref,
   id,
   name,
   description,
@@ -21,18 +22,6 @@ const ProjectCard = ({
   image,
   available,
 }: ProjectProps) => {
-  const projectCardRef = useRef(null);
-  gsap.set(projectCardRef.current, {
-    clipPath: "polygon(0 100%, 100% 100%, 100% 100%, 0% 100%)",
-    opacity: 1,
-  });
-  gsap.to(projectCardRef.current, {
-    clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-    duration: 0.5,
-    ease: "power2.out",
-    opacity: 1,
-    scrollTrigger: { trigger: projectCardRef.current },
-  });
   return (
     <div
       className={`relative bg-cover bg-no-repeat bg-center z-10 h-[550px] w-full items-stretch justify-center py-0 sm:h-[700px] sm:w-[100%] md:h-[650px] md:w-[100%] lg:h-[500px]`}
